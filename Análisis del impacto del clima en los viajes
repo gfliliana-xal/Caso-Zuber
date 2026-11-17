@@ -1,0 +1,48 @@
+Importación de datos
+pandas as pd 
+result_01 = pd.read_csv("/datasets/project_sql_result_01.csv")
+result_04 = pd.read_csv("/datasets/project_sql_result_04.csv")
+result_07 = pd.read_csv("/datasets/project_sql_result_07.csv")
+print(result_01.info())
+print(result_04.info())
+Mostrar las primeras filas para corroborar que el tipo de datos sea correcto.
+result_01.head(10)
+result_04.head(10)
+Identificación de los 10 barrios principales
+top_10_neighborhoods = result_04.head(10)
+print(top_10_neighborhoods.info())
+top_10_neighborhoods.describe()
+import matplotlib.pyplot as plt
+plt.figure(figsize=(12, 6))
+plt.bar(result_01['company_name'], result_01['trips_amount'])
+plt.xlabel('Company name (name)')
+plt.xticks(rotation=90)
+plt.ylabel('Trips_amount')
+plt.title('Determinación de número de viajes por compañía')
+plt.show()
+plt.figure(figsize=(12, 6))
+plt.bar(top_10_neighborhoods['dropoff_location_name'], top_10_neighborhoods['average_trips'])
+plt.xlabel('dropoff_location_name')
+plt.xticks(rotation=45)
+plt.ylabel('average_trips')
+plt.title('Determinación de número de viajes por compañía')
+plt.show()
+PRUEBA DE HIPOTESIS
+result_07.head(10)
+rom scipy import stats
+import numpy as np
+
+# 1. DEFINIR LAS HIPÓTESIS
+print("=== PRUEBA DE HIPÓTESIS ===")
+print("H₀: μ_lluvia = μ_no_lluvia (La duración promedio de los viajes no cambia los sábados lluviosos)")
+print("H₁: μ_lluvia > μ_no_lluvia (La duración promedio de los viajes sí cambia los sábados lluviosos)")
+print("Nivel de significancia: α = 0.05")
+grupo_bad = result_07[result_07['weather_conditions'] == 'Bad']['duration_seconds']
+grupo_good = result_07[result_07['weather_conditions'] == 'Good']['duration_seconds']
+
+t_stat, p_value = stats.ttest_ind(grupo_bad, grupo_good,alternative='greater')
+
+print("=== RESULTADOS DE LA PRUEBA ===")
+print(f"Estadístico t: {t_stat:.4f}")
+print(f"Valor p: {p_value:.6f}")
+print(f"Valor crítico (α = 0.05): {p_value < 0.05}")
